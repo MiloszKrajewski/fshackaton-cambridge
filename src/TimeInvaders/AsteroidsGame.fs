@@ -30,12 +30,11 @@ type AsteroidsGame () as this =
     let mutable shipTexture = null
     let mutable asteroidTexture = null
     let mutable missileTexture = null
-    let mutable gameoverTexture = null
     let mutable fontTexture = null
 
     let mutable crashed = false
+    let mutable finished = false
     let mutable allowShooting = true
-    let mutable youWin = false
 
     let inside (item: Item) = 
         let x, y = item.position.X, item.position.Y
@@ -109,7 +108,6 @@ type AsteroidsGame () as this =
         shipTexture <- load "spaceship.png"
         asteroidTexture <- load "asteroid.png"
         missileTexture <- load "missile.png"
-        gameoverTexture <- load "gameover.png"
         fontTexture <- load "led_font.png"
 
         ship <- { ship with texture = shipTexture }
@@ -163,7 +161,7 @@ type AsteroidsGame () as this =
             crashed <- true
 
         if asteroids.IsEmpty then
-            youWin <- true
+            finished <- true
 
     override this.Update (gameTime) =  
         this.handleInput ()
@@ -207,7 +205,7 @@ type AsteroidsGame () as this =
         if crashed then 
             this.drawText (40, 58) (Vector2(100.0f, 100.0f)) "GAME OVER, MAN!"
 
-        if youWin && (not crashed) then
+        if finished && (not crashed) then
             this.drawText (40, 58) (Vector2(100.0f, 100.0f)) "YOU WON, GREAT!"
 
         spriteBatch.End()
