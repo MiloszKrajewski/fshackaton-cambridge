@@ -57,9 +57,9 @@ type AsteroidsGame () as this =
         {
             position = Vector2(Math.rnd () * screenWidth, Math.rnd () * screenHeight)
             direction = Math.rnd () * 360.0f
-            velocity = Math.rnd () + 2.0f
+            velocity = Math.rnd () + 1.0f
             rotation = 360.0f
-            rotation_speed = Math.rnd () * 10.0f - 0.05f
+            rotation_speed = Math.rnd () * 10.0f - 5.0f
             size = 32.0f
             texture = asteroidTexture
             scale = Math.rnd () + 0.5f
@@ -75,11 +75,11 @@ type AsteroidsGame () as this =
                 { asteroid with 
                     scale = scale
                     direction = direction + 60.0f |> Math.wrap360
-                    rotation_speed = Math.rnd () * 10.0f - 0.05f }
+                    rotation_speed = Math.rnd () * 10.0f - 5.0f }
                 { asteroid with 
                     scale = scale
                     direction = direction - 60.0f |> Math.wrap360
-                    rotation_speed = Math.rnd () * 10.0f - 0.05f }
+                    rotation_speed = Math.rnd () * 10.0f - 5.0f }
             ]
 
     let createMissile (ship: Item) =
@@ -111,7 +111,7 @@ type AsteroidsGame () as this =
         fontTexture <- load "led_font.png"
 
         ship <- { ship with texture = shipTexture }
-        asteroids <- List.init 10 (fun _ -> createAsteroid ())
+        asteroids <- List.init 7 (fun _ -> createAsteroid ())
 
     member private this.handleInput () = 
         let keyboard = Keyboard.GetState()
@@ -120,16 +120,16 @@ type AsteroidsGame () as this =
         let left, right = pressed Keys.Left, pressed Keys.Right
         let direction = 
             match left, right with
-            | true, false -> ship.direction - 10.0f
-            | false, true -> ship.direction + 10.0f
+            | true, false -> ship.direction - 3.0f
+            | false, true -> ship.direction + 3.0f
             | _ -> ship.direction
             |> Math.wrap360
 
         let up, down = pressed Keys.Up, pressed Keys.Down
         let veloctiy =
             match up, down with
-            | true, false -> (ship.velocity + 2.0f) |> min 10.0f
-            | false, true -> (ship.velocity - 1.0f) |> max -5.0f
+            | true, false -> (ship.velocity + 1.0f) |> min 5.0f
+            | false, true -> (ship.velocity - 0.5f) |> max -2.5f
             | _ -> ship.velocity * 0.90f
 
         if (pressed Keys.Space) && (not crashed) then
@@ -204,6 +204,7 @@ type AsteroidsGame () as this =
 
         if crashed then 
             this.drawText (40, 58) (Vector2(100.0f, 100.0f)) "GAME OVER, MAN!"
+            this.drawText (20, 28) (Vector2(220.0f, 160.0f)) "PRESS 'R' TO START"
 
         if finished && (not crashed) then
             this.drawText (40, 58) (Vector2(100.0f, 100.0f)) "YOU WON, GREAT!"
