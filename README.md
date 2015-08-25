@@ -1,4 +1,5 @@
 # fshackaton-cambridge
 F# |> Cambridge hackaton
 
-![alt text](doc/screenshot.png)
+Asteroids clone
+![screenshot](doc/screenshot.png)
